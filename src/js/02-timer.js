@@ -32,7 +32,10 @@ datetimePicker.flatpickr({
 });
 
 startButton.addEventListener('click', () => {
-  const selectedDate = new Date(datetimePicker.selectedDates[0]);
+  const selectedDate =
+    datetimePicker.selectedDates && datetimePicker.selectedDates.length > 0
+      ? new Date(datetimePicker.selectedDates[0])
+      : null;
   const currentDate = new Date();
   const timeDifference = selectedDate - currentDate;
 
