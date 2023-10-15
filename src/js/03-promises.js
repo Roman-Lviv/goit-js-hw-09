@@ -1,4 +1,5 @@
-import * as notiflix from 'notiflix';
+import * as notiflix from 'https://cdn.jsdelivr.net/npm/notiflix@2.4.0/dist/notiflix.min.js';
+
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
