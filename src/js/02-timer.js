@@ -1,12 +1,13 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
 
-const datetimePicker = document.querySelector('button ');
-const startButton = document.querySelector('#start-button');
-const daysValue = document.querySelector('#days');
-const hoursValue = document.querySelector('#hours');
-const minutesValue = document.querySelector('#minutes');
-const secondsValue = document.querySelector('#seconds');
+const datetimePicker = document.querySelector('#datetime-picker');
+const startButton = document.querySelector('[data-start]');
+const daysValue = document.querySelector('[data-days]');
+const hoursValue = document.querySelector('[data-hours]');
+const minutesValue = document.querySelector('[data-minutes]');
+const secondsValue = document.querySelector('[data-seconds]');
 
 let countdownInterval;
 let TIMERDEDLINE = 0;
@@ -20,7 +21,7 @@ datetimePicker.flatpickr({
     const currentDate = new Date();
 
     if (selectedDate <= currentDate) {
-      alert('Будь ласка, виберіть дату у майбутньому');
+      Notiflix.Notify.failure('Будь ласка, виберіть дату у майбутньому');
       startButton.disabled = true;
     } else {
       startButton.disabled = false;
@@ -30,42 +31,32 @@ datetimePicker.flatpickr({
 });
 
 startButton.addEventListener('click', () => {
-  countdownInterval = setInterval(() => {
-    // const selectedDate = datetimePicker.selectedDates[0];
-    const currentDate = new Date();
-    const timeDifference = TIMERDEDLINE - currentDate;
+  if (!countdownInterval) {
+    countdownInterval = setInterval(() => {
+      const currentDate = new Date();
+      const timeDifference = TIMERDEDLINE - currentDate;
 
-    const { days, hours, minutes, seconds } = convertMs(timeDifference);
+      if (timeDifference <= 0) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+        updateCountdown(0);
+        Notiflix.Notify.success('Час вийшов!');
+        return;
+      }
 
-    if (timeDifference <= 0) {
-      clearInterval(countdownInterval);
-      return;
-    }
-  }, 1000);
+      updateCountdown(timeDifference);
+    }, 1000);
+  }
 });
 
-// function updateCountdown() {
-//   const selectedDate = datetimePicker.selectedDates[0];
-//   const currentDate = new Date();
-//   const timeDifference = selectedDate - currentDate;
+function updateCountdown(timeDifference) {
+  const { days, hours, minutes, seconds } = convertMs(timeDifference);
 
-//   const { days, hours, minutes, seconds } = convertMs(timeDifference);
-
-//   if (timeDifference <= 0) {
-//     clearInterval(countdownInterval);
-//     daysValue.textContent = '00';
-//     hoursValue.textContent = '00';
-//     minutesValue.textContent = '00';
-//     secondsValue.textContent = '00';
-//     return;
-//   }
-
-//   // const time = convertMs(timeDifference);
-//   // daysValue.textContent = addLeadingZero(time.days);
-//   // hoursValue.textContent = addLeadingZero(time.hours);
-//   // minutesValue.textContent = addLeadingZero(time.minutes);
-//   // secondsValue.textContent = addLeadingZero(time.seconds);
-// }
+  daysValue.textContent = addLeadingZero(days);
+  hoursValue.textContent = addLeadingZero(hours);
+  minutesValue.textContent = addLeadingZero(minutes);
+  secondsValue.textContent = addLeadingZero(seconds);
+}
 
 function convertMs(ms) {
   const second = 1000;
