@@ -17,18 +17,22 @@ const form = document.querySelector('.form');
 form.addEventListener('submit', async function (event) {
   event.preventDefault();
 
-  const delay = Number(this.querySelector('[name="delay"]').value);
+  let currentDelay = Number(this.querySelector('[name="delay"]').value);
   const step = Number(this.querySelector('[name="step"]').value);
   const amount = Number(this.querySelector('[name="amount"]').value);
 
   for (let position = 1; position <= amount; position++) {
     try {
-      const result = await createPromise(position, delay);
-      notiflix.Notify.Success(`✅ Fulfilled promise ${result.position} in ${result.delay}ms`);
+      const result = await createPromise(position, currentDelay);
+      notiflix.Notify.Success(
+        `✅ Fulfilled promise ${result.position} in ${result.delay}ms`
+      );
     } catch (error) {
-      notiflix.Notify.Failure(`❌ Rejected promise ${error.position} in ${error.delay}ms`);
+      notiflix.Notify.Failure(
+        `❌ Rejected promise ${error.position} in ${error.delay}ms`
+      );
     }
 
-    delay += step;
+    currentDelay += step;
   }
 });
