@@ -1,23 +1,9 @@
-function createPromise(position, delay) {
-  return new Promise((resolve, reject) => {
-    const shouldResolve = Math.random() > 0.3;
-
-    setTimeout(() => {
-      if (shouldResolve) {
-        resolve({ position, delay });
-      } else {
-        reject({ position, delay });
-      }
-    }, delay);
-  });
-}
-
 const form = document.querySelector('.form');
 
 form.addEventListener('submit', async function (event) {
   event.preventDefault();
 
-  const delay = Number(this.querySelector('[name="delay"]').value);
+  let delay = Number(this.querySelector('[name="delay"]').value);
   const step = Number(this.querySelector('[name="step"]').value);
   const amount = Number(this.querySelector('[name="amount"]').value);
 
