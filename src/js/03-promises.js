@@ -1,4 +1,4 @@
-// import * as notiflix from 'https://cdn.jsdelivr.net/npm/notiflix@2.4.0/dist/notiflix.min.js';
+import Notiflix from 'notiflix';
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
