@@ -1,16 +1,12 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-function addLeadingZero(value) {
-  return value.toString().padStart(2, '0');
-}
-
 const datetimePicker = document.querySelector('#datetime-picker');
-const startButton = document.querySelector('[data-start]');
-const daysValue = document.querySelector('[data-days]');
-const hoursValue = document.querySelector('[data-hours]');
-const minutesValue = document.querySelector('[data-minutes]');
-const secondsValue = document.querySelector('[data-seconds]');
+const startButton = document.querySelector('#start-button');
+const daysValue = document.querySelector('#days');
+const hoursValue = document.querySelector('#hours');
+const minutesValue = document.querySelector('#minutes');
+const secondsValue = document.querySelector('#seconds');
 
 let countdownInterval;
 
@@ -23,7 +19,7 @@ datetimePicker.flatpickr({
     const currentDate = new Date();
 
     if (selectedDate <= currentDate) {
-      alert('Please choose a date in the future');
+      alert('Будь ласка, виберіть дату у майбутньому');
       startButton.disabled = true;
     } else {
       startButton.disabled = false;
@@ -32,10 +28,7 @@ datetimePicker.flatpickr({
 });
 
 startButton.addEventListener('click', () => {
-  const selectedDate =
-    datetimePicker.selectedDates && datetimePicker.selectedDates.length > 0
-      ? new Date(datetimePicker.selectedDates[0])
-      : null;
+  const selectedDate = datetimePicker.selectedDates[0];
   const currentDate = new Date();
   const timeDifference = selectedDate - currentDate;
 
@@ -44,24 +37,30 @@ startButton.addEventListener('click', () => {
     return;
   }
 
-  countdownInterval = setInterval(() => {
-    const time = convertMs(timeDifference);
-    daysValue.textContent = addLeadingZero(time.days);
-    hoursValue.textContent = addLeadingZero(time.hours);
-    minutesValue.textContent = addLeadingZero(time.minutes);
-    secondsValue.textContent = addLeadingZero(time.seconds);
-
-    timeDifference -= 1000;
-
-    if (timeDifference < 0) {
-      clearInterval(countdownInterval);
-      daysValue.textContent = '00';
-      hoursValue.textContent = '00';
-      minutesValue.textContent = '00';
-      secondsValue.textContent = '00';
-    }
-  }, 1000);
+  countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
 });
+
+function updateCountdown() {
+  const selectedDate = datetimePicker.selectedDates[0];
+  const currentDate = new Date();
+  const timeDifference = selectedDate - currentDate;
+
+  if (timeDifference <= 0) {
+    clearInterval(countdownInterval);
+    daysValue.textContent = '00';
+    hoursValue.textContent = '00';
+    minutesValue.textContent = '00';
+    secondsValue.textContent = '00';
+    return;
+  }
+
+  const time = convertMs(timeDifference);
+  daysValue.textContent = addLeadingZero(time.days);
+  hoursValue.textContent = addLeadingZero(time.hours);
+  minutesValue.textContent = addLeadingZero(time.minutes);
+  secondsValue.textContent = addLeadingZero(time.seconds);
+}
 
 function convertMs(ms) {
   const second = 1000;
@@ -75,4 +74,8 @@ function convertMs(ms) {
   const seconds = Math.floor((ms % minute) / second);
 
   return { days, hours, minutes, seconds };
+}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }
