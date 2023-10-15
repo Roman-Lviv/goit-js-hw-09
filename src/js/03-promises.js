@@ -1,4 +1,4 @@
-import Notiflix from 'notiflix';
+import { Notify } from 'notiflix';
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
@@ -26,11 +26,11 @@ form.addEventListener('submit', async function (event) {
   for (let position = 1; position <= amount; position++) {
     try {
       const result = await createPromise(position, currentDelay);
-      notiflix.Notify.Success(
+      Notify.success(
         `✅ Fulfilled promise ${result.position} in ${result.delay}ms`
       );
     } catch (error) {
-      notiflix.Notify.Failure(
+      Notify.failure(
         `❌ Rejected promise ${error.position} in ${error.delay}ms`
       );
     }
