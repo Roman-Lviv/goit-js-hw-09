@@ -1,0 +1,2 @@
+document.querySelector(".form").addEventListener("submit",(async function(e){e.preventDefault();let t=Number(this.querySelector('[name="delay"]').value);const o=Number(this.querySelector('[name="step"]').value),l=Number(this.querySelector('[name="amount"]').value);for(let e=1;e<=l;e++){try{const o=await createPromise(e,t);console.log(`✅ Fulfilled promise ${o.position} in ${o.delay}ms`)}catch(e){console.log(`❌ Rejected promise ${e.position} in ${e.delay}ms`)}t+=o}}));
+//# sourceMappingURL=03-promises.818261ff.js.map
