@@ -1,3 +1,4 @@
+import * as notiflix from 'notiflix';
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
